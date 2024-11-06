@@ -7,15 +7,15 @@ import { showNotification } from "../../utils/showNotification";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const Signup = () => {
-  const { email, setEmail } = useAuthStore();
+  const { token, setToken, refreshToken, setRefreshToken } = useAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (email) {
+    if (token && refreshToken) {
       navigate("/");
     }
-  }, [email, navigate]);
-  if (email) {
+  }, [token, refreshToken, navigate]);
+  if (token && refreshToken) {
     return null;
   }
   const handleSubmit = async (e) => {
@@ -42,7 +42,8 @@ const Signup = () => {
         type: "success",
         description: "Signup successfully",
       });
-      setEmail(data?.data?.user?.email);
+      setToken(data?.data?.accessToken);
+      setRefreshToken(data?.data?.refreshToken);
       navigate("/");
     } else {
       showNotification({

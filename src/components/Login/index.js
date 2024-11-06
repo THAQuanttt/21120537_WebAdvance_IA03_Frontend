@@ -6,16 +6,16 @@ import { useAuthStore } from "../../utils/store";
 import { showNotification } from "../../utils/showNotification";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const Login = () => {
-  const { email, setEmail } = useAuthStore();
+  const { token, setToken, refreshToken, setRefreshToken } = useAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (email) {
+    if (token && refreshToken) {
       navigate("/");
     }
-  }, [email, navigate]);
+  }, [token, refreshToken, navigate]);
 
-  if (email) {
+  if (token && refreshToken) {
     return null;
   }
   const handleSubmit = async (e) => {
@@ -34,7 +34,8 @@ const Login = () => {
         type: "success",
         description: "Login successfully",
       });
-      setEmail(data?.data?.user?.email);
+      setToken(data?.data?.accessToken);
+      setRefreshToken(data?.data?.refreshToken);
       navigate("/");
     } else {
       showNotification({
